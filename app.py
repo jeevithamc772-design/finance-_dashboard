@@ -4,13 +4,11 @@ import sqlite3
 st.title("Income Tracker")
 
 source = st.text_input("Income Source")
-
 amount = st.number_input("Income Amount")
 
 if st.button("Save Income"):
 
     conn = sqlite3.connect("finance.db")
-
     cursor = conn.cursor()
 
     cursor.execute(
@@ -26,7 +24,6 @@ if st.button("Save Income"):
 st.subheader("Saved Incomes")
 
 conn = sqlite3.connect("finance.db")
-
 cursor = conn.cursor()
 
 cursor.execute("SELECT * FROM income")
@@ -35,5 +32,10 @@ data = cursor.fetchall()
 
 conn.close()
 
+total_income = 0
+
 for row in data:
     st.write(row)
+    total_income += row[2]
+
+st.metric("Total Income", f"₹ {total_income:,.2f}")
